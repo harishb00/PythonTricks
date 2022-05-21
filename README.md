@@ -54,7 +54,7 @@ with open('hello.txt', 'w') as f:
 
 * ***How to provide the same functionality to our own classes and functions? Implementing Context-Managers***
 
-* *** What is context manager? Protocol (or interface) that our object or function needs to follow in order to support `with` statement.***
+* ***What is context manager? Protocol (or interface) that our object or function needs to follow in order to support `with` statement.***
 
 ### Example(s)
 ```python

@@ -29,4 +29,68 @@ names = [
 ```
 
 ## Unit 2.3 - Context Managers and the with Statement
-... *In Progress*
+* `with` statement makes code that deals with system resources more readable.
+* It ensures that open file descriptors (or any system resource) are closed automatically after program execution leaves the ***context*** of `with` statement.
+
+### Examples(s)
+```python
+f = open('hello.txt', 'w')
+f.write('hello, world')
+f.close()
+
+# above can be replaced with below code which
+# guarantees that the file is closed even if there's
+# an exception during f.write(). More Verbose.
+f = open('hello.txt', 'w')
+try:
+    f.write('hello, world')
+finally:
+    f.close()
+
+# same as above but less verbose
+with open('hello.txt', 'w') as f:
+    f.write('hello, world!')
+```
+
+* ***How to provide the same functionality to our own classes and functions? Implementing Context-Managers***
+
+* *** What is context manager? Protocol (or interface) that our object or function needs to follow in order to support `with` statement.***
+
+### Example(s)
+```python
+# Using Decorators
+from contextlib import contextmanager
+
+@contextmanager
+def managed_file(name):
+    try:
+        f = open(name, 'w') # acquire resource
+        yield f # yields resource
+    finally:
+        f.close() # release resource
+
+with managed_file('with_functions.txt') as f:
+    f.write('hello, world!')
+    f.write('bye now')
+
+# By Implementing the interface of context-manager in class
+class ManagedFile:
+    def __init__(self, name):
+        self.name = name
+    
+    # Acquires the resource when execution enters context.
+    def __enter__(self):
+        self.file = open(self.name, 'w')
+        return self.file
+    
+    # Free up resource when execution leaves context.
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.file:
+            self.file.close()
+
+with ManagedFile('with_object_hello.txt') as f:
+    f.write('hello, world!')
+    f.write('bye now')
+```
+
+* Indenter exercise and timer exercise are available in indent_exercise.py and timer_exercise.py files respectivly under unit_2_3_with_statement directory.
